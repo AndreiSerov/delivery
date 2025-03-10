@@ -1,5 +1,7 @@
 package org.example.core.domain.sharedKernel
 
+import kotlin.math.abs
+
 data class Location(
     val x: Int,
     val y: Int
@@ -10,6 +12,7 @@ data class Location(
         validateCoordinate(y)
     }
 
+    fun countStepsToOtherLocation(location: Location): Int = abs(x - location.x) + abs(y - location.y)
 
     companion object {
         private val range = (1..10)

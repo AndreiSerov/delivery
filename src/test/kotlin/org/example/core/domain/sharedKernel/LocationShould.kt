@@ -11,14 +11,11 @@ class LocationShould {
     @Test
     fun `not contain coordinate less than 1`() {
         assertThrows<IllegalArgumentException> { Location(11, 1) }
-
-
     }
 
     @Test
     fun `not contain coordinate bigger than 10`() {
         assertThrows<IllegalArgumentException> { Location(1, 0) }
-
     }
 
     @Test
@@ -42,10 +39,6 @@ class LocationShould {
         val location1 = Location(2, 6)
         val location2 = Location(4, 9)
 
-        val xRange = location2.x - location1.x
-        val yRange = location2.y - location1.y
-
-        assertEquals(2, xRange)
-        assertEquals(3, yRange)
+        assertEquals(5, location1.countStepsToOtherLocation(location2))
     }
 }
