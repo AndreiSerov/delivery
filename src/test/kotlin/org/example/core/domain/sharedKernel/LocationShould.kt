@@ -1,44 +1,49 @@
 package org.example.core.domain.sharedKernel
 
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Test
+import arrow.core.raise.either
+import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.equals.shouldBeEqual
+import io.kotest.matchers.equals.shouldNotBeEqual
+import io.kotest.matchers.types.shouldBeTypeOf
 
-import org.junit.jupiter.api.assertThrows
 
-class LocationShould {
+class LocationShould : FunSpec({
 
-    @Test
-    fun `not contain coordinate less than 1`() {
-        assertThrows<IllegalArgumentException> { Location(11, 1) }
+    test("not contain coordinate less than 1`()") {
+        Location.create(11, 1).mapLeft {
+            it.shouldBeTypeOf<LocationError>()
+        }
     }
 
-    @Test
-    fun `not contain coordinate bigger than 10`() {
-        assertThrows<IllegalArgumentException> { Location(1, 0) }
+    test("not contain coordinate bigger than 10") {
+        Location.create(1, 0).mapLeft {
+            it.shouldBeTypeOf<LocationError>()
+        }
     }
 
-    @Test
-    fun `be equal to other location with same coordinates`() {
-        val location1 = Location(1, 1)
-        val location2 = Location(1, 1)
 
-        assertTrue(location1 == location2)
+    test("be equal to other location with same coordinates") {
+        val location1 = Location.create(1, 1)
+        val location2 = Location.minLocation
+
+        either {
+            location1.bind() shouldBeEqual location2
+        }
     }
 
-    @Test
-    fun `not be equal to other location with different x coordinate`() {
-        val location1 = Location(1, 1)
-        val location2 = Location(5, 1)
+    test("not be equal to other location with different x coordinate") {
+        val location1 = Location.create(1, 1)
+        val location2 = Location.create(5, 1)
 
-        assertTrue(location1 != location2)
+        location1 shouldNotBeEqual location2
     }
 
-    @Test
-    fun `have possibility to count range from other location`() {
-        val location1 = Location(2, 6)
-        val location2 = Location(4, 9)
+    test("have possibility to count range from other location") {
+        either {
+            val location1 = Location.create(2, 6).bind()
+            val location2 = Location.create(4, 9).bind()
 
-        assertEquals(5, location1.countStepsToOtherLocation(location2))
+            location1.countStepsToOtherLocation(location2).bind() shouldBeEqual 5
+        }
     }
-}
+})
