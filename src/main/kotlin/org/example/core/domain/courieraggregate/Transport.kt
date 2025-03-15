@@ -15,8 +15,6 @@ data class Transport private constructor(
     val speed: Int
 ) {
 
-
-
     companion object {
         fun create(name: String, speed: Int, id: UUID = UUID.randomUUID()): Either<DomainError, Transport> = either {
             ensure(name.isEmpty()) { TransportError() }
