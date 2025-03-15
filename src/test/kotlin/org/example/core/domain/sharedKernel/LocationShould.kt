@@ -46,4 +46,16 @@ class LocationShould : FunSpec({
             location1.countStepsToOtherLocation(location2).bind() shouldBeEqual 5
         }
     }
+
+    test("have possibility to move by 3 steps") {
+        either {
+            val location1 = Location.create(2, 6).bind()
+            val location2 = Location.create(4, 9).bind()
+
+            val resultLocation = location1.takeAStep(location2, 3)
+
+            resultLocation.x shouldBeEqual 4
+            resultLocation.y shouldBeEqual 7
+        }
+    }
 })
