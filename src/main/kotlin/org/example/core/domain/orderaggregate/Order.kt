@@ -11,21 +11,27 @@ import java.util.*
 @Suppress("DataClassPrivateConstructor")
 data class Order private constructor(
     val id: UUID,
-    val location: Location,
-    val status: OrderStatus,
-    val courierId: UUID?
+    private var _location: Location,
+    private var _status: OrderStatus,
+    private var _courierId: UUID?
 ) {
+    val location: Location get() = _location
+    val status: OrderStatus get() = _status
+    val courierId: UUID? get() = _courierId
 
-    fun assign(courierId: UUID): Order = copy(status = OrderStatus.ASSIGNED, courierId = courierId)
+    fun assign(courierId: UUID): Order = apply {
+        _status = OrderStatus.ASSIGNED
+        _courierId = courierId
+    }
 
     fun complete(courierId: UUID): Either<DomainError, Order> = either {
-        ensure(status == OrderStatus.ASSIGNED) { IllegalArgumentError }
+        ensure(_status != OrderStatus.ASSIGNED) { IllegalArgumentError }
 
-        copy(status = OrderStatus.COMPLETED)
+        this@Order.apply { _status = OrderStatus.COMPLETED }
     }
 
     companion object {
-        fun create(id: UUID, location: Location): Order {
+        fun create(location: Location, id: UUID = UUID.randomUUID()): Order {
             return Order(id, location, OrderStatus.CREATED, null)
         }
     }
