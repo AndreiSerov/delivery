@@ -5,6 +5,7 @@ import arrow.core.raise.either
 import arrow.core.raise.ensure
 import kotlin.math.abs
 
+@Suppress("DataClassPrivateConstructor")
 data class Location private constructor(
     val x: Int,
     val y: Int
@@ -12,6 +13,18 @@ data class Location private constructor(
 
     fun countStepsToOtherLocation(location: Location): Either<LocationError, Int> =
         either { abs(x - location.x) + abs(y - location.y) }
+
+    fun takeAStep(location: Location, count: Int = 1): Location {
+        if (count == 0 || this == location) return this
+
+        return when {
+            location.x > x -> copy(x = x + 1)
+            location.x < x -> copy(x = x - 1)
+            location.y > y -> copy(y = y + 1)
+            else -> copy(y = y - 1)
+        }
+            .takeAStep(location, count - 1)
+    }
 
     companion object {
 

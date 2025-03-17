@@ -1,7 +1,8 @@
 plugins {
-    val kotlinVersion = "2.1.10"
+    val kotlinVersion = "1.9.24"
 
     kotlin("jvm") version kotlinVersion
+    id("io.arrow-kt.analysis.kotlin") version "2.0.2"
     application
 }
 
