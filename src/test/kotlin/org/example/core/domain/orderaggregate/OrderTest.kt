@@ -10,13 +10,13 @@ class OrderTest : FunSpec({
 
     test("assign") {
         either {
-            val destination = Location.create(5, 5).bind()
-            val order = Order.create(destination)
-            val vasya = Courier.create(
+            val destination = Location(5, 5).bind()
+            val order = Order(destination)
+            val vasya = Courier(
                 "vasya",
                 "velosiped",
                 2,
-                Location.create(1, 1).bind()
+                Location(1, 1).bind()
             ).bind()
 
             order.assign(vasya.id)
@@ -28,18 +28,18 @@ class OrderTest : FunSpec({
 
     test("complete") {
         either {
-            val destination = Location.create(3, 1).bind()
-            val order = Order.create(destination)
-            val vasya = Courier.create(
+            val destination = Location(3, 1).bind()
+            val order = Order(destination)
+            val vasya = Courier(
                 "vasya",
                 "velosiped",
                 2,
-                Location.create(1, 1).bind()
+                Location(1, 1).bind()
             ).bind()
 
             order.assign(vasya.id)
             vasya.move(order.location)
-            order.complete(vasya.id)
+            order.complete()
 
             order.status shouldBe OrderStatus.COMPLETED
         }

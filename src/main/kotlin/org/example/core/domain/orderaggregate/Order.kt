@@ -8,30 +8,36 @@ import org.example.core.domain.sharedKernel.IllegalArgumentError
 import org.example.core.domain.sharedKernel.Location
 import java.util.*
 
-@Suppress("DataClassPrivateConstructor")
-data class Order private constructor(
+class Order private constructor(
     val id: UUID,
-    private var _location: Location,
-    private var _status: OrderStatus,
-    private var _courierId: UUID?
+    location: Location,
+    status: OrderStatus,
+    courierId: UUID?
 ) {
-    val location: Location get() = _location
-    val status: OrderStatus get() = _status
-    val courierId: UUID? get() = _courierId
+    var location: Location = location
+        private set
+    var status: OrderStatus = status
+        private set
+    var courierId: UUID? = courierId
+        private set
 
-    fun assign(courierId: UUID): Order = apply {
-        _status = OrderStatus.ASSIGNED
-        _courierId = courierId
+    fun assign(courierId: UUID): Either<DomainError, Order> = either {
+        ensure(!status.canBeAssigned) { IllegalArgumentError("") }
+
+        this@Order.apply {
+            status = OrderStatus.ASSIGNED
+            this.courierId = courierId
+        }
     }
 
-    fun complete(courierId: UUID): Either<DomainError, Order> = either {
-        ensure(_status != OrderStatus.ASSIGNED) { IllegalArgumentError }
+    fun complete(): Either<DomainError, Order> = either {
+        ensure(status.canBeComplete) { IllegalArgumentError("") }
 
-        this@Order.apply { _status = OrderStatus.COMPLETED }
+        this@Order.apply { status = OrderStatus.COMPLETED }
     }
 
     companion object {
-        fun create(location: Location, id: UUID = UUID.randomUUID()): Order {
+        operator fun invoke(location: Location, id: UUID = UUID.randomUUID()): Order {
             return Order(id, location, OrderStatus.CREATED, null)
         }
     }
