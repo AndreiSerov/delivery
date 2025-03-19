@@ -1,6 +1,7 @@
 package org.example.core.domain.sharedKernel
 
 import arrow.core.raise.either
+import io.kotest.assertions.fail
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.equals.shouldNotBeEqual
@@ -27,7 +28,11 @@ class LocationShould : FunSpec({
         val location2 = Location.minLocation
 
         either {
-            location1.bind() shouldBeEqual location2
+            location1.bind()
+        }.onRight {
+            it shouldBeEqual location2
+        }.onLeft {
+            fail("Should be right. Error=$it")
         }
     }
 
@@ -43,7 +48,11 @@ class LocationShould : FunSpec({
             val location1 = Location.invoke(2, 6).bind()
             val location2 = Location.invoke(4, 9).bind()
 
-            location1.countStepsToOtherLocation(location2).bind() shouldBeEqual 5
+            location1.countStepsToOtherLocation(location2).bind()
+        }.onRight {
+            it shouldBeEqual 5
+        }.onLeft {
+            fail("Should be right. Error=$it")
         }
     }
 
@@ -52,10 +61,12 @@ class LocationShould : FunSpec({
             val location1 = Location.invoke(2, 6).bind()
             val location2 = Location.invoke(4, 9).bind()
 
-            val resultLocation = location1.takeAStep(location2, 3)
-
-            resultLocation.x shouldBeEqual 4
-            resultLocation.y shouldBeEqual 7
+           location1.takeAStep(location2, 3)
+        }.onRight {
+            it.x shouldBeEqual 4
+            it.y shouldBeEqual 7
+        }.onLeft {
+            fail("Should be right. Error=$it")
         }
     }
 })
