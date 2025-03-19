@@ -33,7 +33,7 @@ data class Location private constructor(
 
         private val range = (minLocation.x..maxLocation.x)
 
-        fun create(x: Int, y: Int): Either<LocationError, Location> = either {
+        operator fun invoke(x: Int, y: Int): Either<LocationError, Location> = either {
             ensure(minLocation.x < x && x < maxLocation.x) { LocationError("x should be in range $range") }
             ensure(minLocation.y < y && y < maxLocation.y) { LocationError("y should be in range $range") }
 
