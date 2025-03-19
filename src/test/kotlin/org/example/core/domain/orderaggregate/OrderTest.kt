@@ -1,6 +1,7 @@
 package org.example.core.domain.orderaggregate
 
 import arrow.core.raise.either
+import io.kotest.assertions.fail
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import org.example.core.domain.courieraggregate.Courier
@@ -22,7 +23,11 @@ class OrderTest : FunSpec({
             order.assign(vasya.id)
             vasya.move(order.location)
 
-            order.status shouldBe OrderStatus.ASSIGNED
+            order
+        }.onRight {
+            it.status shouldBe OrderStatus.ASSIGNED
+        }.onLeft {
+            fail("Should be right. Error=$it")
         }
     }
 
@@ -41,7 +46,11 @@ class OrderTest : FunSpec({
             vasya.move(order.location)
             order.complete()
 
-            order.status shouldBe OrderStatus.COMPLETED
+            order
+        }.onRight {
+            it.status shouldBe OrderStatus.COMPLETED
+        }.onLeft {
+            fail("Should be right. Error=$it")
         }
     }
 })

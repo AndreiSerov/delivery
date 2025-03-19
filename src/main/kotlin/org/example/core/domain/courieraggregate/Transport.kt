@@ -27,22 +27,7 @@ class Transport private constructor(
         }
     }
 
-    fun move(startLocation: Location, location: Location): Location =
-        moveHelper(startLocation, location, speed)
-
-    private tailrec fun moveHelper(startLocation: Location, location: Location, singleStepRemaining: Int = 1): Location {
-        if (singleStepRemaining == 0 || startLocation == location) return startLocation
-
-        val newLocation = with(startLocation) {
-            when {
-                location.x > x -> copy(x = x + 1)
-                location.x < x -> copy(x = x - 1)
-                location.y > y -> copy(y = y + 1)
-                else -> copy(y = y - 1)
-            }
-        }
-        return moveHelper(newLocation, location, singleStepRemaining - 1)
-    }
+    fun move(startLocation: Location, location: Location): Location = startLocation.takeAStep(location, speed)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

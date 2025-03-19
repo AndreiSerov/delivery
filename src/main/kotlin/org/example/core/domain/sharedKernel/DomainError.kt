@@ -6,7 +6,11 @@ sealed interface DomainError {
 
 data class IllegalArgumentError(override val context: String) : DomainError
 
-class LocationError(override val context: String) : DomainError
+data class CourierError(override val context: String) : DomainError
 
-class TransportError(override val context: String) : DomainError
+data class DispatchError(override val context: String) : DomainError
+
+data class LocationError(override val context: String) : DomainError
+
+data class TransportError(override val context: String) : DomainError
 

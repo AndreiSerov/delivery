@@ -2,6 +2,8 @@ package org.example.core.domain.courieraggregate
 
 import arrow.core.Either
 import arrow.core.raise.either
+import arrow.core.raise.ensure
+import org.example.core.domain.sharedKernel.CourierError
 import org.example.core.domain.sharedKernel.DomainError
 import org.example.core.domain.sharedKernel.Location
 import org.example.core.domain.sharedKernel.Name
@@ -26,6 +28,11 @@ class Courier private constructor(
 
 
     fun free(): Courier = apply { status = CourierStatus.FREE }
+    fun busy(): Either<CourierError, Courier> = either {
+        ensure(status != CourierStatus.BUSY) { CourierError("Courier id=$id already busy") }
+
+        this@Courier.apply { status = CourierStatus.BUSY }
+    }
 
     fun countSteps(destination: Location): Either<DomainError, Double> = either {
         val steps = location.countStepsToOtherLocation(destination).bind() / transport.speed.toDouble()
