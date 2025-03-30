@@ -1,10 +1,12 @@
 package org.example.core.domain.sharedKernel
 
-sealed interface DomainError
+sealed interface DomainError {
+    val context: String
+}
 
-data object IllegalArgumentError : DomainError
+data class IllegalArgumentError(override val context: String) : DomainError
 
-class LocationError(val message: String = "") : DomainError
+class LocationError(override val context: String) : DomainError
 
-class TransportError(val message: String = "") : DomainError
+class TransportError(override val context: String) : DomainError
 

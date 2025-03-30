@@ -9,10 +9,10 @@ class TransportTest : FunSpec({
 
     test("oneMove") {
         either {
-            val car = Transport.create("car", 2).bind()
-            val newLocation = car.oneMove(
-                Location.create(1, 1).bind(),
-                Location.create(1, 9).bind(),
+            val car = Transport("car", 2).bind()
+            val newLocation = car.move(
+                Location(1, 1).bind(),
+                Location(1, 9).bind(),
             )
             newLocation.x shouldBe 1
             newLocation.y shouldBe 3
