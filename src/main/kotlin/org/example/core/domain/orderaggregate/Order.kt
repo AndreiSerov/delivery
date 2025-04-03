@@ -22,7 +22,7 @@ class Order private constructor(
         private set
 
     fun assign(courierId: UUID): Either<DomainError, Order> = either {
-        ensure(!status.canBeAssigned) { IllegalArgumentError("") }
+        ensure(status.canBeAssigned) { IllegalArgumentError("") }
 
         this@Order.apply {
             status = OrderStatus.ASSIGNED
