@@ -9,7 +9,7 @@ import org.example.core.domain.sharedKernel.Name
 import org.example.core.domain.sharedKernel.TransportError
 import java.util.*
 
-class Transport private constructor(
+class Transport internal constructor(
     val id: UUID,
     val name: Name,
     val speed: Int

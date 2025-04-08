@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: backend-kotlin-api-vacancy-request
+  task:
+    scheduling:
+      pool:
+        size: 10
+  datasource:
+    url: jdbc:postgresql://${DATABASE_HOSTS_STRING}/${DATABASE_NAME}${DATABASE_CONNECTION_SETTINGS}
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
+    hikari:
+      maximum-pool-size: ${DATABASE_POOL_MAX_SIZE:10}
+      minimum-idle: ${DATABASE_POOL_MIN_SIZE:3}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true

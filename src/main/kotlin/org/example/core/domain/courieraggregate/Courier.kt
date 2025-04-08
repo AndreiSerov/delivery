@@ -9,7 +9,7 @@ import org.example.core.domain.sharedKernel.Location
 import org.example.core.domain.sharedKernel.Name
 import java.util.*
 
-class Courier private constructor(
+class Courier internal constructor(
     val id: UUID,
     name: Name,
     transport: Transport,

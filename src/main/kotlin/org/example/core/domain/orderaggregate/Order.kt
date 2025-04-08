@@ -8,7 +8,7 @@ import org.example.core.domain.sharedKernel.IllegalArgumentError
 import org.example.core.domain.sharedKernel.Location
 import java.util.*
 
-class Order private constructor(
+class Order internal constructor(
     val id: UUID,
     location: Location,
     status: OrderStatus,
