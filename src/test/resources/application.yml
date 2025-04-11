@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: backend-kotlin-api-vacancy-request
+  task:
+    scheduling:
+      pool:
+        size: 10
+  datasource:
+    url: jdbc:postgresql://localhost:5432/test
+    username: test
+    password: test
+  jpa:
+    hibernate:
+      ddl-auto: validate
