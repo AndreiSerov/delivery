@@ -9,14 +9,13 @@ import org.example.core.domain.sharedKernel.DomainError
 import org.example.core.domain.sharedKernel.IllegalArgumentError
 
 class DispatchServiceImpl : DispatchService {
-    override fun dispatch(order: Order, couriers: Collection<Courier>): Either<DomainError, Courier> = either {
+    override fun dispatch(order: Order, couriers: Collection<Courier>): Either<DomainError, Order> = either {
         val fastestCourier = couriers
             .filter { it.status == CourierStatus.FREE }
             .minByOrNull { it.countSteps(order.location).bind() }
             ?: raise(IllegalArgumentError("Invalid input: no free couriers"))
 
-        order.assign(fastestCourier).bind()
-
         fastestCourier.busy().bind()
+        order.assign(fastestCourier).bind()
     }
 }

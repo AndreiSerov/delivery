@@ -15,3 +15,5 @@ data class LocationError(override val context: String) : DomainError
 data class TransportError(override val context: String) : DomainError
 
 data class MoveCouriersError(override val context: String) : DomainError
+
+data class AssignOrdersError(override val context: String) : DomainError
