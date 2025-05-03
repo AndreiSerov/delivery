@@ -1,4 +1,4 @@
-package org.example.core.port.dal.assignorders
+package org.example.core.port.dal.command.assignorders
 
 import arrow.core.Either
 import org.example.core.domain.courieraggregate.Courier

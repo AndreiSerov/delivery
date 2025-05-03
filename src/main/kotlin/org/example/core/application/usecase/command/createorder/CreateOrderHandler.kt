@@ -3,7 +3,7 @@ package org.example.core.application.usecase.command.createorder
 import arrow.core.raise.either
 import org.example.core.domain.orderaggregate.Order
 import org.example.core.domain.sharedKernel.Location
-import org.example.core.port.dal.createorder.CreateOrderDal
+import org.example.core.port.dal.command.createorder.CreateOrderDal
 import org.springframework.stereotype.Service
 
 

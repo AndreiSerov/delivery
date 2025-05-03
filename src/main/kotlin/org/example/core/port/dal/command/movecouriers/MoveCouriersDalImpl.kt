@@ -1,4 +1,4 @@
-package org.example.core.port.dal.movecouriers
+package org.example.core.port.dal.command.movecouriers
 
 import arrow.core.Either
 import arrow.core.raise.either

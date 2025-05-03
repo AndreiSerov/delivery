@@ -3,7 +3,7 @@ package org.example.core.application.usecase.command.movecouriers
 import arrow.core.raise.either
 import arrow.core.raise.ensureNotNull
 import org.example.core.domain.sharedKernel.MoveCouriersError
-import org.example.core.port.dal.movecouriers.MoveCouriersDal
+import org.example.core.port.dal.command.movecouriers.MoveCouriersDal
 import org.springframework.stereotype.Service
 
 @Service
