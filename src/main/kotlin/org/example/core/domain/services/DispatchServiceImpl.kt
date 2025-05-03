@@ -15,7 +15,7 @@ class DispatchServiceImpl : DispatchService {
             .minByOrNull { it.countSteps(order.location).bind() }
             ?: raise(IllegalArgumentError("Invalid input: no free couriers"))
 
-        order.assign(fastestCourier.id).bind()
+        order.assign(fastestCourier).bind()
 
         fastestCourier.busy().bind()
     }

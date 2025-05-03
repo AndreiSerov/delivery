@@ -9,13 +9,14 @@ import org.example.core.domain.courieraggregate.Courier
 import org.example.core.domain.orderaggregate.Order
 import org.example.core.domain.sharedKernel.IllegalArgumentError
 import org.example.core.domain.sharedKernel.Location
+import java.util.UUID
 
 class DispatchServiceTest : FunSpec({
 
     test("dispatch") {
         either {
             val destination = Location(3, 1).bind()
-            val order = Order(destination)
+            val order = Order(UUID.randomUUID(), destination)
             val vasya = Courier(
                 "vasya",
                 "velosiped",
@@ -46,7 +47,7 @@ class DispatchServiceTest : FunSpec({
     test("dispatch with diff speed") {
         either {
             val destination = Location(3, 1).bind()
-            val order = Order(destination)
+            val order = Order(UUID.randomUUID(), destination)
             val vasya = Courier(
                 "vasya",
                 "velosiped",
@@ -78,7 +79,7 @@ class DispatchServiceTest : FunSpec({
     test("dispatch no free couriers") {
         either {
             val destination = Location(3, 1).bind()
-            val order = Order(destination)
+            val order = Order(UUID.randomUUID(), destination)
             val vasya = Courier(
                 "vasya",
                 "velosiped",

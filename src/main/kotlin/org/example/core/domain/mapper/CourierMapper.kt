@@ -8,7 +8,6 @@ import org.example.core.domain.mapper.TransportMapper.toEntity
 import org.example.core.domain.sharedKernel.Location
 import org.example.core.domain.sharedKernel.Name
 import org.example.infrastructure.adapter.postgres.entity.CourierEntity
-import org.example.infrastructure.adapter.postgres.entity.TransportEntity
 
 object CourierMapper {
     fun Courier.toEntity() = CourierEntity(
@@ -20,11 +19,11 @@ object CourierMapper {
         status = status.name,
     )
 
-    fun CourierEntity.toDomain(transportEntity: TransportEntity) = either {
+    fun CourierEntity.toDomain() = either {
         Courier(
             id = id,
             name = Name(name).bind(),
-            transport = transportEntity.toDomain(),
+            transport = transport.toDomain(),
             location = Location(locationX, locationY).bind(),
             status = CourierStatus.valueOf(status),
         )

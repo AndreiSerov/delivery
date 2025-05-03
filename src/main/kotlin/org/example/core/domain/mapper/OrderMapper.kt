@@ -1,6 +1,8 @@
 package org.example.core.domain.mapper
 
 import arrow.core.raise.either
+import org.example.core.domain.mapper.CourierMapper.toDomain
+import org.example.core.domain.mapper.CourierMapper.toEntity
 import org.example.core.domain.orderaggregate.Order
 import org.example.core.domain.orderaggregate.OrderStatus
 import org.example.core.domain.sharedKernel.Location
@@ -12,7 +14,7 @@ object OrderMapper {
         locationX = location.x,
         locationY = location.y,
         status = status.name,
-        courierId = courierId,
+        courier = courier?.toEntity(),
     )
 
     fun OrderEntity.toDomain() = either {
@@ -20,7 +22,7 @@ object OrderMapper {
             id = id,
             location = Location(locationX, locationY).bind(),
             status = OrderStatus.valueOf(status),
-            courierId = courierId,
+            courier = courier?.toDomain()?.bind()
         )
     }
 }

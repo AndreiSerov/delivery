@@ -60,8 +60,6 @@ class Location private constructor(
             Location(x, y)
         }
 
-        fun random(): Either<LocationError, Location> = either {
-            Location(range.random(), range.random())
-        }
+        fun random() = Location(range.random(), range.random())
     }
 }
