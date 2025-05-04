@@ -6,18 +6,17 @@ import org.example.core.domain.sharedKernel.Location
 import org.example.core.port.dal.command.createorder.CreateOrderDal
 import org.springframework.stereotype.Service
 
-
 @Service
 class CreateOrderHandler(
-    val dal: CreateOrderDal
+    val dal: CreateOrderDal,
 ) {
-    fun handle(command: CreateOrderCommand) = either {
-        dal.getOrder(command.basketId).bind()?.let { return@either }
+    fun handle(command: CreateOrderCommand) =
+        either {
+            dal.getOrder(command.basketId).bind()?.let { return@either }
 
-        val location = Location.random()
-        val order = Order(command.basketId, location)
+            val location = Location.random()
+            val order = Order(command.basketId, location)
 
-        dal.saveOrder(order)
-    }
+            dal.saveOrder(order)
+        }
 }
-

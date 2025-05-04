@@ -6,6 +6,8 @@ import java.util.UUID
 
 interface OrderRepository : JpaRepository<OrderEntity, UUID> {
     fun findAllByStatus(status: String): Collection<OrderEntity>
+
     fun findFirstByStatus(status: String): OrderEntity?
+
     fun findAllByStatusNot(status: String): Collection<OrderEntity>
 }

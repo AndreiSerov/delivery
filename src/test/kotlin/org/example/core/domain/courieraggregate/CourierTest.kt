@@ -11,62 +11,65 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import org.example.core.domain.sharedKernel.Location
 
-class CourierTest : FunSpec({
+class CourierTest :
+    FunSpec({
 
-    test("count steps") {
-        either {
-            val vasya = Courier(
-                "vasya",
-                "velosiped",
-                2,
-                Location(1, 1).bind()
-            ).bind()
+        test("count steps") {
+            either {
+                val vasya =
+                    Courier(
+                        "vasya",
+                        "velosiped",
+                        2,
+                        Location(1, 1).bind(),
+                    ).bind()
 
-            val destination = Location(5, 5).bind()
+                val destination = Location(5, 5).bind()
 
-            vasya.countSteps(destination).bind() shouldBe 4
+                vasya.countSteps(destination).bind() shouldBe 4
+            }
         }
-    }
 
-    test("free") {
-        either {
-            val vasya = Courier(
-                "vasya",
-                "velosiped",
-                2,
-                Location(1, 1).bind()
-            ).bind()
+        test("free") {
+            either {
+                val vasya =
+                    Courier(
+                        "vasya",
+                        "velosiped",
+                        2,
+                        Location(1, 1).bind(),
+                    ).bind()
 
-            vasya.free().status shouldBe CourierStatus.FREE
+                vasya.free().status shouldBe CourierStatus.FREE
+            }
         }
-    }
 
-    test("move") {
-        either {
-            val vasya = Courier(
-                "vasya",
-                "velosiped",
-                2,
-                Location(1, 1).bind()
-            ).bind()
+        test("move") {
+            either {
+                val vasya =
+                    Courier(
+                        "vasya",
+                        "velosiped",
+                        2,
+                        Location(1, 1).bind(),
+                    ).bind()
 
-            val destination = Location(5, 5).bind()
-            val newLocation = vasya.move(destination).location
+                val destination = Location(5, 5).bind()
+                val newLocation = vasya.move(destination).location
 
-            newLocation.x shouldBe 3
-            newLocation.y shouldBe 1
+                newLocation.x shouldBe 3
+                newLocation.y shouldBe 1
+            }
         }
-    }
-})
+    })
 
+data class NotEven(
+    val i: Int,
+)
 
-data class NotEven(val i: Int)
+fun Raise<NotEven>.isEven(i: Int): Int = i.also { ensure(i % 2 == 0) { NotEven(i) } }
 
-fun Raise<NotEven>.isEven(i: Int): Int =
-    i.also { ensure(i % 2 == 0) { NotEven(i) } }
-
-fun isEven2(i: Int): Either<NotEven, Int> =
-    either { isEven(i) }
+fun isEven2(i: Int): Either<NotEven, Int> = either { isEven(i) }
 
 val errors = nonEmptyListOf(NotEven(1), NotEven(3), NotEven(5), NotEven(7), NotEven(9)).left()
 

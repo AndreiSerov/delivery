@@ -17,17 +17,19 @@ import org.springframework.stereotype.Component
 @Component
 class AssignOrdersDalImpl(
     private val orderRepository: OrderRepository,
-    private val courierRepository: CourierRepository
+    private val courierRepository: CourierRepository,
 ) : AssignOrdersDal {
+    override fun getFirstCreatedOrder(): Either<DomainError, Order?> =
+        either {
+            orderRepository.findFirstByStatus(OrderStatus.CREATED.name)?.toDomain()?.bind()
+        }
 
-    override fun getFirstCreatedOrder(): Either<DomainError, Order?> = either {
-        orderRepository.findFirstByStatus(OrderStatus.CREATED.name)?.toDomain()?.bind()
-    }
-
-    override fun getAvailableCouriers(): Either<DomainError, Collection<Courier>> = either {
-        courierRepository.findAllByStatus(CourierStatus.FREE.name)
-            .map { it.toDomain().bind() }
-    }
+    override fun getAvailableCouriers(): Either<DomainError, Collection<Courier>> =
+        either {
+            courierRepository
+                .findAllByStatus(CourierStatus.FREE.name)
+                .map { it.toDomain().bind() }
+        }
 
     override fun saveChanges(order: Order) {
         orderRepository.save(order.toEntity())

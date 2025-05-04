@@ -12,10 +12,10 @@ import org.springframework.stereotype.Component
 
 @Component
 class GetNotCompletedOrdersDalImpl(
-    private val orderRepository: OrderRepository
+    private val orderRepository: OrderRepository,
 ) : GetNotCompletedOrdersDal {
-
-    override fun getByQuery(query: GetNotCompletedOrdersQuery): Either<DomainError, List<Order>> = either {
-        orderRepository.findAllByStatusNot(OrderStatus.COMPLETED.name).map { it.toDomain().bind() }
-    }
+    override fun getByQuery(query: GetNotCompletedOrdersQuery): Either<DomainError, List<Order>> =
+        either {
+            orderRepository.findAllByStatusNot(OrderStatus.COMPLETED.name).map { it.toDomain().bind() }
+        }
 }

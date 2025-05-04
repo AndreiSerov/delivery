@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class GetAllCouriersHandler(
-    private val dal: GetAllCouriersDal
+    private val dal: GetAllCouriersDal,
 ) {
     fun handle(query: GetAllCouriersQuery): Either<DomainError, List<Courier>> = dal.getByQuery(query)
 }

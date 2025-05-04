@@ -4,16 +4,14 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Table
 import org.example.core.domain.sharedKernel.Name
-import java.util.*
+import java.util.UUID
 
 @Entity
 @Table(name = "transports")
 class TransportEntity(
     id: UUID,
-
     @Column(nullable = false)
     var name: Name,
-
     @Column(nullable = false)
     var speed: Int,
 ) : BaseEntity<OrderEntity>(id)

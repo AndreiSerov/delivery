@@ -10,22 +10,24 @@ import org.example.core.domain.sharedKernel.Name
 import org.example.infrastructure.adapter.postgres.entity.CourierEntity
 
 object CourierMapper {
-    fun Courier.toEntity() = CourierEntity(
-        id = id,
-        name = name.value,
-        transport = transport.toEntity(),
-        locationX = location.x,
-        locationY = location.y,
-        status = status.name,
-    )
-
-    fun CourierEntity.toDomain() = either {
-        Courier(
+    fun Courier.toEntity() =
+        CourierEntity(
             id = id,
-            name = Name(name).bind(),
-            transport = transport.toDomain(),
-            location = Location(locationX, locationY).bind(),
-            status = CourierStatus.valueOf(status),
+            name = name.value,
+            transport = transport.toEntity(),
+            locationX = location.x,
+            locationY = location.y,
+            status = status.name,
         )
-    }
+
+    fun CourierEntity.toDomain() =
+        either {
+            Courier(
+                id = id,
+                name = Name(name).bind(),
+                transport = transport.toDomain(),
+                location = Location(locationX, locationY).bind(),
+                status = CourierStatus.valueOf(status),
+            )
+        }
 }

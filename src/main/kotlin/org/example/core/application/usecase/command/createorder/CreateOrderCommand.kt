@@ -4,7 +4,7 @@ import java.util.UUID
 
 class CreateOrderCommand(
     val basketId: UUID,
-    val street: String
+    val street: String,
 ) {
     init {
         require(street.isNotBlank())

@@ -7,5 +7,6 @@ import java.util.UUID
 
 interface CreateOrderDal {
     fun getOrder(basketId: UUID): Either<DomainError, Order?>
+
     fun saveOrder(order: Order)
 }

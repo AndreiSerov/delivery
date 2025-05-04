@@ -7,27 +7,34 @@ import org.example.core.domain.sharedKernel.DomainError
 import org.example.core.domain.sharedKernel.Location
 import org.example.core.domain.sharedKernel.Name
 import org.example.core.domain.sharedKernel.TransportError
-import java.util.*
+import java.util.UUID
 
 class Transport internal constructor(
     val id: UUID,
     val name: Name,
-    val speed: Int
+    val speed: Int,
 ) {
-
     companion object {
-        operator fun invoke(name: String, speed: Int, id: UUID = UUID.randomUUID()): Either<DomainError, Transport> = either {
-            ensure(speed in 1..3) { TransportError("Speed out of range (1..3)") }
+        operator fun invoke(
+            name: String,
+            speed: Int,
+            id: UUID = UUID.randomUUID(),
+        ): Either<DomainError, Transport> =
+            either {
+                ensure(speed in 1..3) { TransportError("Speed out of range (1..3)") }
 
-            Transport(
-                id,
-                Name(name).bind(),
-                speed
-            )
-        }
+                Transport(
+                    id,
+                    Name(name).bind(),
+                    speed,
+                )
+            }
     }
 
-    fun move(startLocation: Location, location: Location): Location = startLocation.takeAStep(location, speed)
+    fun move(
+        startLocation: Location,
+        location: Location,
+    ): Location = startLocation.takeAStep(location, speed)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -38,7 +45,5 @@ class Transport internal constructor(
         return id == other.id
     }
 
-    override fun hashCode(): Int {
-        return id.hashCode()
-    }
+    override fun hashCode(): Int = id.hashCode()
 }

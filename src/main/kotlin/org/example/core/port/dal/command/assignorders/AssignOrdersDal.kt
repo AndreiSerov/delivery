@@ -7,6 +7,8 @@ import org.example.core.domain.sharedKernel.DomainError
 
 interface AssignOrdersDal {
     fun getFirstCreatedOrder(): Either<DomainError, Order?>
+
     fun getAvailableCouriers(): Either<DomainError, Collection<Courier>>
+
     fun saveChanges(order: Order)
 }

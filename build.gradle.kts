@@ -8,6 +8,8 @@ plugins {
 
     id("org.springframework.boot") version "3.4.2"
     id("io.spring.dependency-management") version "1.1.7"
+
+    id("org.jlleitschuh.gradle.ktlint") version "12.2.0"
     jacoco
 }
 
@@ -26,7 +28,7 @@ dependencies {
     runtimeOnly("org.postgresql:postgresql")
 
     val kotestVersion = "5.7.2"
-    testImplementation ("io.kotest:kotest-property:$kotestVersion")
+    testImplementation("io.kotest:kotest-property:$kotestVersion")
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
     testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
 
@@ -62,14 +64,13 @@ tasks.jacocoTestReport {
                         "**/dto",
                         "**/logging",
                         "**/repository",
-                        "**/*Application*.*"
+                        "**/*Application*.*",
                     )
                 }
-            }
-        )
+            },
+        ),
     )
 }
-
 
 java {
     toolchain {
@@ -81,4 +82,8 @@ allOpen {
     annotation("jakarta.persistence.Entity")
     annotation("jakarta.persistence.Embeddable")
     annotation("jakarta.persistence.MappedSuperclass")
+}
+
+ktlint {
+    version.set("1.4.1")
 }

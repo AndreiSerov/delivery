@@ -9,20 +9,22 @@ import org.example.core.domain.sharedKernel.Location
 import org.example.infrastructure.adapter.postgres.entity.OrderEntity
 
 object OrderMapper {
-    fun Order.toEntity() = OrderEntity(
-        id = id,
-        locationX = location.x,
-        locationY = location.y,
-        status = status.name,
-        courier = courier?.toEntity(),
-    )
-
-    fun OrderEntity.toDomain() = either {
-        Order(
+    fun Order.toEntity() =
+        OrderEntity(
             id = id,
-            location = Location(locationX, locationY).bind(),
-            status = OrderStatus.valueOf(status),
-            courier = courier?.toDomain()?.bind()
+            locationX = location.x,
+            locationY = location.y,
+            status = status.name,
+            courier = courier?.toEntity(),
         )
-    }
+
+    fun OrderEntity.toDomain() =
+        either {
+            Order(
+                id = id,
+                location = Location(locationX, locationY).bind(),
+                status = OrderStatus.valueOf(status),
+                courier = courier?.toDomain()?.bind(),
+            )
+        }
 }

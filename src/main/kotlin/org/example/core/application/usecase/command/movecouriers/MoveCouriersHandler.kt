@@ -8,22 +8,23 @@ import org.springframework.stereotype.Service
 
 @Service
 class MoveCouriersHandler(
-    val dal: MoveCouriersDal
+    val dal: MoveCouriersDal,
 ) {
-    fun handle(command: MoveCouriersCommand) = either {
-        dal.getAllAssignedOrders()
-            .bind()
-            .map { order ->
-                ensureNotNull(order.courier) { MoveCouriersError("$order has not courier") }
+    fun handle(command: MoveCouriersCommand) =
+        either {
+            dal
+                .getAllAssignedOrders()
+                .bind()
+                .map { order ->
+                    ensureNotNull(order.courier) { MoveCouriersError("$order has not courier") }
 
-                order.courier?.move(order.location)
-                if (order.courier?.location == order.location) {
-                    order.complete()
-                    order.courier?.free()
-                }
+                    order.courier?.move(order.location)
+                    if (order.courier?.location == order.location) {
+                        order.complete()
+                        order.courier?.free()
+                    }
 
-                order
-            }
-            .let { dal.saveChanges(it) }
-    }
+                    order
+                }.let { dal.saveChanges(it) }
+        }
 }

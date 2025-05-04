@@ -11,9 +11,10 @@ import org.springframework.stereotype.Component
 
 @Component
 class GetAllCouriersDalImpl(
-    private val courierRepository: CourierRepository
-): GetAllCouriersDal {
-    override fun getByQuery(query: GetAllCouriersQuery): Either<DomainError, List<Courier>>  = either {
-        courierRepository.findAll().map { it.toDomain().bind() }
-    }
+    private val courierRepository: CourierRepository,
+) : GetAllCouriersDal {
+    override fun getByQuery(query: GetAllCouriersQuery): Either<DomainError, List<Courier>> =
+        either {
+            courierRepository.findAll().map { it.toDomain().bind() }
+        }
 }

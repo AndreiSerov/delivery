@@ -6,5 +6,6 @@ import org.example.core.domain.sharedKernel.DomainError
 
 interface MoveCouriersDal {
     fun getAllAssignedOrders(): Either<DomainError, List<Order>>
+
     fun saveChanges(orders: List<Order>)
 }
