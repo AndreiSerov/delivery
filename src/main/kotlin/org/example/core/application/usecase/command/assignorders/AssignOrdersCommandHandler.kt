@@ -14,13 +14,12 @@ class AssignOrdersCommandHandler(
     private val dal: AssignOrdersDal,
     private val dispatchService: DispatchService,
 ) {
-    fun handle(command: AssignOrdersCommand): Either<DomainError, Unit> =
-        either {
-            val order = dal.getFirstCreatedOrder().bind() ?: raise(AssignOrdersError("No orders in CREATED status"))
-            val availableCouriers = dal.getAvailableCouriers().bind()
-            ensure(availableCouriers.isEmpty()) { AssignOrdersError("No free couriers") }
-            val dispatchedOrder = dispatchService.dispatch(order, availableCouriers).bind()
+    fun handle(command: AssignOrdersCommand): Either<DomainError, Unit> = either {
+        val order = dal.getFirstCreatedOrder().bind() ?: raise(AssignOrdersError("No orders in CREATED status"))
+        val availableCouriers = dal.getAvailableCouriers().bind()
+        ensure(availableCouriers.isEmpty()) { AssignOrdersError("No free couriers") }
+        val dispatchedOrder = dispatchService.dispatch(order, availableCouriers).bind()
 
-            dal.saveChanges(dispatchedOrder)
-        }
+        dal.saveChanges(dispatchedOrder)
+    }
 }

@@ -10,13 +10,12 @@ import org.springframework.stereotype.Service
 class CreateOrderHandler(
     val dal: CreateOrderDal,
 ) {
-    fun handle(command: CreateOrderCommand) =
-        either {
-            dal.getOrder(command.basketId).bind()?.let { return@either }
+    fun handle(command: CreateOrderCommand) = either {
+        dal.getOrder(command.basketId).bind()?.let { return@either }
 
-            val location = Location.random()
-            val order = Order(command.basketId, location)
+        val location = Location.random()
+        val order = Order(command.basketId, location)
 
-            dal.saveOrder(order)
-        }
+        dal.saveOrder(order)
+    }
 }

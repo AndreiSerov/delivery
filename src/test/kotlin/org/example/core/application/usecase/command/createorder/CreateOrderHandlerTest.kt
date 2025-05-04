@@ -1,19 +1,15 @@
 package org.example.core.application.usecase.command.createorder
 
-import arrow.core.raise.either
 import io.kotest.core.spec.style.FunSpec
-import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
 import io.zonky.test.db.AutoConfigureEmbeddedDatabase
 import jakarta.transaction.Transactional
 import org.example.DbInitializer
-import org.example.core.domain.courieraggregate.Courier
-import org.example.core.domain.mapper.CourierMapper.toEntity
-import org.example.core.domain.sharedKernel.Location
-import org.example.infrastructure.adapter.postgres.repository.CourierRepository
+import org.example.infrastructure.adapter.postgres.repository.OrderRepository
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
+import java.util.UUID
+import kotlin.jvm.optionals.getOrNull
 
 @SpringBootTest
 @ContextConfiguration(initializers = [DbInitializer::class])
@@ -23,28 +19,19 @@ import org.springframework.test.context.ContextConfiguration
 )
 @Transactional
 class CreateOrderHandlerTest(
-    sut: CourierRepository,
+    sut: CreateOrderHandler,
+    orderRepository: OrderRepository
 ) : FunSpec({
 
-    test("save to database") {
-        either {
-            val vasya =
-                Courier(
-                    "vasya",
-                    "velosiped",
-                    2,
-                    Location(1, 1).bind(),
-                ).bind()
+    afterTest { (_, _) ->
+        orderRepository.deleteAll()
+    }
 
-            sut.save(vasya.toEntity())
+    test("when order is not exists then create new") {
+        val command = CreateOrderCommand(UUID.randomUUID(), "Lenina")
+        sut.handle(command)
 
-            val couriers = sut.findAll()
-
-            couriers.size shouldBe 1
-
-            val transport = couriers.first().transport
-            transport shouldNotBe null
-            transport.id shouldBeEqual vasya.transport.id
-        }
+        val orderInDb = orderRepository.findById(command.basketId).getOrNull()
+        orderInDb?.id shouldBe command.basketId
     }
 })
