@@ -1,4 +1,4 @@
-package org.example.infrastructure.adapter.postgres.repository
+package org.example.core.application.usecase.command.createorder
 
 import arrow.core.raise.either
 import io.kotest.core.spec.style.FunSpec
@@ -11,6 +11,7 @@ import org.example.DbInitializer
 import org.example.core.domain.courieraggregate.Courier
 import org.example.core.domain.mapper.CourierMapper.toEntity
 import org.example.core.domain.sharedKernel.Location
+import org.example.infrastructure.adapter.postgres.repository.CourierRepository
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
 
@@ -21,7 +22,7 @@ import org.springframework.test.context.ContextConfiguration
     type = AutoConfigureEmbeddedDatabase.DatabaseType.POSTGRES,
 )
 @Transactional
-class CourierRepositoryTest(
+class CreateOrderHandlerTest(
     sut: CourierRepository,
 ) : FunSpec({
 

@@ -26,41 +26,41 @@ class OrderRepositoryTest(
     sut: OrderRepository,
 ) : FunSpec({
 
-        afterTest { (_, _) ->
-            sut.deleteAll()
-        }
+    afterTest { (_, _) ->
+        sut.deleteAll()
+    }
 
-        test("save to database") {
-            sut.save(Order(UUID.randomUUID(), Location.maxLocation).toEntity())
+    test("save to database") {
+        sut.save(Order(UUID.randomUUID(), Location.maxLocation).toEntity())
+
+        val all = sut.findAll()
+
+        all.size shouldBe 1
+    }
+
+    test("find all by status") {
+        either {
+            val destination = Location(5, 5).bind()
+            val order = Order(UUID.randomUUID(), destination)
+            val vasya =
+                Courier(
+                    "vasya",
+                    "velosiped",
+                    2,
+                    Location(1, 1).bind(),
+                ).bind()
+
+            order.assign(vasya)
+
+            sut.save(order.toEntity())
 
             val all = sut.findAll()
+            val assignedOrders = sut.findAllByStatus(OrderStatus.ASSIGNED.name)
+            val createdOrders = sut.findAllByStatus(OrderStatus.CREATED.name)
 
             all.size shouldBe 1
+            assignedOrders.size shouldBe 1
+            createdOrders.size shouldBe 0
         }
-
-        test("find all by status") {
-            either {
-                val destination = Location(5, 5).bind()
-                val order = Order(UUID.randomUUID(), destination)
-                val vasya =
-                    Courier(
-                        "vasya",
-                        "velosiped",
-                        2,
-                        Location(1, 1).bind(),
-                    ).bind()
-
-                order.assign(vasya)
-
-                sut.save(order.toEntity())
-
-                val all = sut.findAll()
-                val assignedOrders = sut.findAllByStatus(OrderStatus.ASSIGNED.name)
-                val createdOrders = sut.findAllByStatus(OrderStatus.CREATED.name)
-
-                all.size shouldBe 1
-                assignedOrders.size shouldBe 1
-                createdOrders.size shouldBe 0
-            }
-        }
-    })
+    }
+})
