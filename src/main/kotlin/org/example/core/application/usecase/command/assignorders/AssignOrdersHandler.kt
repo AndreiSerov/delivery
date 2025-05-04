@@ -10,7 +10,7 @@ import org.example.core.port.dal.command.assignorders.AssignOrdersDal
 import org.springframework.stereotype.Service
 
 @Service
-class AssignOrdersCommandHandler(
+class AssignOrdersHandler(
     private val dal: AssignOrdersDal,
     private val dispatchService: DispatchService,
 ) {

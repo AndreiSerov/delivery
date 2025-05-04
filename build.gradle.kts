@@ -9,6 +9,8 @@ plugins {
     id("org.springframework.boot") version "3.4.2"
     id("io.spring.dependency-management") version "1.1.7"
 
+    id("org.openapi.generator") version "7.12.0"
+
     id("org.jlleitschuh.gradle.ktlint") version "12.2.0"
     jacoco
 }
@@ -21,6 +23,8 @@ dependencies {
     implementation("io.arrow-kt:arrow-core:2.0.1")
     implementation("org.springframework.boot:spring-boot-autoconfigure")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
     implementation("org.flywaydb:flyway-core")
@@ -82,6 +86,28 @@ allOpen {
     annotation("jakarta.persistence.Entity")
     annotation("jakarta.persistence.Embeddable")
     annotation("jakarta.persistence.MappedSuperclass")
+}
+
+openApiGenerate {
+    inputSpec = "openapi.yml"
+    generatorName = "kotlin-spring"
+    outputDir = "$projectDir"
+    generateApiTests = false
+    generateModelTests = false
+    generateApiDocumentation = false
+    generateModelDocumentation = false
+    supportingFilesConstrainedTo = listOf()
+    modelPackage = "org.example.api.adapter.http"
+    apiPackage = "org.example.api.adapter.http"
+    configOptions = mapOf(
+        "basePackage" to "org.example.api.config",
+        "interfaceOnly" to "true",
+        "exceptionHandler" to "false",
+        "gradleBuildFile" to "false",
+        "skipDefaultInterface" to "true",
+        "useSpringBoot3" to "true",
+        "useTags" to "true",
+    )
 }
 
 ktlint {
