@@ -12,12 +12,10 @@ class GrpcConfiguration(
     private val host: String
 ) {
 
-
     @Bean
     fun geoBlockingStub(): GeoGrpc.GeoBlockingStub {
         val channel = ManagedChannelBuilder.forTarget(host).usePlaintext().build()
 
         return GeoGrpc.newBlockingStub(channel)
     }
-
 }

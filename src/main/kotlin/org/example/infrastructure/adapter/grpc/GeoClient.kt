@@ -8,8 +8,10 @@ class GeoClient(
 ) {
 
     fun findStreetLocation(street: String): Location {
-        val request = GetGeolocationRequest.newBuilder()
-            .setStreet(street).build()
+        val request = GetGeolocationRequest
+            .newBuilder()
+            .setStreet(street)
+            .build()
 
         return geoBlockingStub.getGeolocation(request).location
     }

@@ -29,7 +29,8 @@ class CreateOrderDalImpl(
     }
 
     override fun getLocation(street: String): Either<DomainError, Location> = either {
-        return geoClient.findStreetLocation(street)
+        return geoClient
+            .findStreetLocation(street)
             .let { Location(it.x, it.y) }
     }
 }
