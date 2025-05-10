@@ -6,6 +6,8 @@ import org.example.core.domain.mapper.OrderMapper.toDomain
 import org.example.core.domain.mapper.OrderMapper.toEntity
 import org.example.core.domain.orderaggregate.Order
 import org.example.core.domain.sharedKernel.DomainError
+import org.example.core.domain.sharedKernel.Location
+import org.example.infrastructure.adapter.grpc.GeoClient
 import org.example.infrastructure.adapter.postgres.repository.OrderRepository
 import org.springframework.stereotype.Component
 import java.util.UUID
@@ -14,6 +16,7 @@ import kotlin.jvm.optionals.getOrNull
 @Component
 class CreateOrderDalImpl(
     val orderRepository: OrderRepository,
+    val geoClient: GeoClient,
 ) : CreateOrderDal {
     override fun getOrder(basketId: UUID): Either<DomainError, Order?> =
         either {
@@ -23,5 +26,11 @@ class CreateOrderDalImpl(
 
     override fun saveOrder(order: Order) {
         orderRepository.save(order.toEntity())
+    }
+
+    override fun getLocation(street: String): Either<DomainError, Location> = either {
+        return geoClient
+            .findStreetLocation(street)
+            .let { Location(it.x, it.y) }
     }
 }

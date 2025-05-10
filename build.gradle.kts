@@ -1,3 +1,5 @@
+import com.google.protobuf.gradle.id
+
 plugins {
     val kotlinVersion = "2.1.10"
 
@@ -10,6 +12,8 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7"
 
     id("org.openapi.generator") version "7.12.0"
+
+    id("com.google.protobuf") version "0.9.5"
 
     id("org.jlleitschuh.gradle.ktlint") version "12.2.0"
     jacoco
@@ -30,6 +34,13 @@ dependencies {
     implementation("org.flywaydb:flyway-core")
     implementation("org.flywaydb:flyway-database-postgresql")
     runtimeOnly("org.postgresql:postgresql")
+
+    implementation("io.grpc:grpc-kotlin-stub:1.4.1")
+    implementation("io.grpc:grpc-protobuf:1.71.0")
+    implementation("com.google.protobuf:protobuf-kotlin:4.30.2")
+    runtimeOnly("io.grpc:grpc-okhttp:1.71.0")
+
+    protobuf(files("proto"))
 
     val kotestVersion = "5.7.2"
     testImplementation("io.kotest:kotest-property:$kotestVersion")
@@ -112,4 +123,22 @@ openApiGenerate {
 
 ktlint {
     version.set("1.4.1")
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:4.30.2"
+    }
+    plugins {
+        id("grpc") {
+            artifact = "io.grpc:protoc-gen-grpc-java:1.71.0"
+        }
+    }
+    generateProtoTasks {
+        ofSourceSet("main").forEach {
+            it.plugins {
+                id("grpc") { }
+            }
+        }
+    }
 }

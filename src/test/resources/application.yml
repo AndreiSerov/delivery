@@ -12,3 +12,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+
+config:
+  geo:
+    host: localhost:5004
