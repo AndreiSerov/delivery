@@ -28,38 +28,36 @@ class DeliveryApiImpl(
     override fun createOrder(): ResponseEntity<out Any> {
         val orderId = UUID.randomUUID()
         val street = RandomStringUtils.insecure().nextPrint(20)
-        return createOrderHandler.handle(CreateOrderCommand(orderId, street))
+        return createOrderHandler
+            .handle(CreateOrderCommand(orderId, street))
             .fold(
                 { error -> handleError(error) },
                 { ResponseEntity.created(URI.create("/orders/$orderId")).build() }
             )
     }
 
-    override fun getCouriers(): ResponseEntity<out Any> {
-        return getAllCouriersHandler.handle(GetAllCouriersQuery())
+    override fun getCouriers(): ResponseEntity<out Any> = getAllCouriersHandler
+        .handle(GetAllCouriersQuery())
             .fold(
                 { error -> handleError(error) },
                 { couriers -> ResponseEntity.ok(couriers.map { it.toResponse() }) }
             )
-    }
 
-    override fun getOrders(): ResponseEntity<out Any> {
-        return getNotCompletedOrdersHandler.handle(GetNotCompletedOrdersQuery())
+    override fun getOrders(): ResponseEntity<out Any> = getNotCompletedOrdersHandler
+        .handle(GetNotCompletedOrdersQuery())
             .fold(
                 { error -> handleError(error) },
                 { orders -> ResponseEntity.ok(orders.map { it.toResponse() }) }
             )
-    }
 
-    private fun handleError(error: DomainError): ResponseEntity<ErrorResponse> {
-        return ResponseEntity.internalServerError()
+    private fun handleError(error: DomainError): ResponseEntity<ErrorResponse> = ResponseEntity
+        .internalServerError()
             .body(
                 ErrorResponse(
                     code = HttpStatus.INTERNAL_SERVER_ERROR.value(),
                     message = error.context
                 )
             )
-    }
 }
 
 private fun CourierDomain.toResponse() = Courier(
