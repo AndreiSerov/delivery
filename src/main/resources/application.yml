@@ -17,3 +17,7 @@ spring:
       ddl-auto: validate
   flyway:
     enabled: true
+
+config:
+  geo:
+    host: localhost:5004

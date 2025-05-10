@@ -5,6 +5,10 @@ package geo;
 option csharp_namespace = "GeoApp.Api";
 option go_package = "geosrv/geopb";
 
+option java_multiple_files = true;
+option java_package = "org.example.infrastructure.adapter.grpc";
+option java_outer_classname = "GeoServiceProto";
+
 // The Geo service definition.
 service Geo {
 

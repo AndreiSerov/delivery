@@ -39,6 +39,8 @@ dependencies {
     implementation("io.grpc:grpc-protobuf:1.71.0")
     implementation("com.google.protobuf:protobuf-kotlin:4.30.2")
 
+    protobuf(files("proto"))
+
     val kotestVersion = "5.7.2"
     testImplementation("io.kotest:kotest-property:$kotestVersion")
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
