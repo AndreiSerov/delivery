@@ -14,27 +14,26 @@ import org.example.core.domain.sharedKernel.Location
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
 
-
 @SpringBootTest
 @ContextConfiguration(initializers = [DbInitializer::class])
 @AutoConfigureEmbeddedDatabase(
     provider = AutoConfigureEmbeddedDatabase.DatabaseProvider.ZONKY,
-    type = AutoConfigureEmbeddedDatabase.DatabaseType.POSTGRES
+    type = AutoConfigureEmbeddedDatabase.DatabaseType.POSTGRES,
 )
 @Transactional
 class CourierRepositoryTest(
     sut: CourierRepository,
-    transportRepository: TransportRepository
 ) : FunSpec({
 
     test("save to database") {
         either {
-            val vasya = Courier(
-                "vasya",
-                "velosiped",
-                2,
-                Location(1, 1).bind()
-            ).bind()
+            val vasya =
+                Courier(
+                    "vasya",
+                    "velosiped",
+                    2,
+                    Location(1, 1).bind(),
+                ).bind()
 
             sut.save(vasya.toEntity())
 

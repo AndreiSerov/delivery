@@ -7,16 +7,15 @@ import org.example.core.domain.sharedKernel.CourierError
 import org.example.core.domain.sharedKernel.DomainError
 import org.example.core.domain.sharedKernel.Location
 import org.example.core.domain.sharedKernel.Name
-import java.util.*
+import java.util.UUID
 
 class Courier internal constructor(
     val id: UUID,
     name: Name,
     transport: Transport,
     location: Location,
-    status: CourierStatus
+    status: CourierStatus,
 ) {
-
     var name: Name = name
         private set
     var transport: Transport = transport
@@ -26,38 +25,42 @@ class Courier internal constructor(
     var status: CourierStatus = status
         private set
 
-
     fun free(): Courier = apply { status = CourierStatus.FREE }
-    fun busy(): Either<CourierError, Courier> = either {
-        ensure(status != CourierStatus.BUSY) { CourierError("Courier id=$id already busy") }
 
-        this@Courier.apply { status = CourierStatus.BUSY }
-    }
+    fun busy(): Either<CourierError, Courier> =
+        either {
+            ensure(status != CourierStatus.BUSY) { CourierError("Courier id=$id already busy") }
 
-    fun countSteps(destination: Location): Either<DomainError, Double> = either {
-        val steps = location.countStepsToOtherLocation(destination).bind() / transport.speed.toDouble()
-        steps
-    }
+            this@Courier.apply { status = CourierStatus.BUSY }
+        }
 
-    fun move(destination: Location): Courier = apply {
-        location = transport.move(location, destination)
-        status = if (status == CourierStatus.FREE) CourierStatus.BUSY else CourierStatus.FREE
-    }
+    fun countSteps(destination: Location): Either<DomainError, Double> =
+        either {
+            val steps = location.countStepsToOtherLocation(destination).bind() / transport.speed.toDouble()
+            steps
+        }
+
+    fun move(destination: Location): Courier =
+        apply {
+            location = transport.move(location, destination)
+            status = if (status == CourierStatus.FREE) CourierStatus.BUSY else CourierStatus.FREE
+        }
 
     companion object {
         operator fun invoke(
             name: String,
             transportName: String,
             transportSpeed: Int,
-            location: Location
-        ): Either<DomainError, Courier> = either {
-            Courier(
-                UUID.randomUUID(),
-                Name(name).bind(),
-                Transport(transportName, transportSpeed).bind(),
-                location,
-                CourierStatus.FREE
-            )
-        }
+            location: Location,
+        ): Either<DomainError, Courier> =
+            either {
+                Courier(
+                    UUID.randomUUID(),
+                    Name(name).bind(),
+                    Transport(transportName, transportSpeed).bind(),
+                    location,
+                    CourierStatus.FREE,
+                )
+            }
     }
 }

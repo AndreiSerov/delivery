@@ -4,15 +4,14 @@ import jakarta.persistence.Column
 import jakarta.persistence.Id
 import jakarta.persistence.MappedSuperclass
 import org.hibernate.proxy.HibernateProxy
-import java.util.*
+import java.util.UUID
 
 @MappedSuperclass
 class BaseEntity<T : BaseEntity<T>>(
     @Id
     @Column(name = "id", nullable = false)
-    var id: UUID
+    var id: UUID,
 ) {
-
     final override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null) return false
