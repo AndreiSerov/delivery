@@ -38,6 +38,7 @@ dependencies {
     implementation("io.grpc:grpc-kotlin-stub:1.4.1")
     implementation("io.grpc:grpc-protobuf:1.71.0")
     implementation("com.google.protobuf:protobuf-kotlin:4.30.2")
+    runtimeOnly("io.grpc:grpc-okhttp:1.71.0")
 
     protobuf(files("proto"))
 
